@@ -1,0 +1,105 @@
+# Default Configuration for Hybrid Retrieval System
+
+# Vector Database Configuration
+vector_config:
+  # Model for encoding text
+  model_name: "sentence-transformers/all-MiniLM-L6-v2"
+  
+  # Target embedding dimension after PCA
+  embedding_dim: 256
+  
+  # Whether to apply PCA dimensionality reduction
+  use_pca: true
+  
+  # Variance to preserve in PCA (if not specifying exact dimension)
+  pca_variance: 0.94
+  
+  # Type of FAISS index: 'hnsw', 'flat', 'ivf'
+  index_type: "hnsw"
+  
+  # HNSW index parameters
+  hnsw_params:
+    M: 16                    # Number of connections per layer
+    ef_construction: 200     # Size of dynamic candidate list during construction
+    ef_search: 50           # Size of dynamic candidate list during search
+  
+  # Quantization method: 'product', 'scalar', null
+  quantization: "product"
+
+# Knowledge Graph Configuration
+kg_config:
+  # Entity recognition settings
+  entity_recognition:
+    method: "spacy"                    # 'spacy', 'pattern', 'hybrid'
+    model: "en_core_web_sm"            # spaCy model to use
+    confidence_threshold: 0.7           # Minimum confidence for entities
+  
+  # Relation extraction settings
+  relation_extraction:
+    method: "hybrid"                    # 'pattern', 'neural', 'hybrid'
+    confidence_threshold: 0.7           # Minimum confidence for relations
+    max_distance: 10                    # Maximum token distance between entities
+  
+  # Graph pruning settings
+  pruning:
+    strategy: "hybrid"                  # 'degree', 'centrality', 'hybrid', 'none'
+    edge_retention: 0.65                # Fraction of edges to retain (0.0-1.0)
+    centrality_threshold: 0.2           # Threshold for centrality-based pruning
+    min_degree: 2                       # Minimum node degree to retain
+  
+  # Graph traversal settings
+  max_traversal_depth: 2                # Maximum depth for graph traversal
+  max_neighbors: 50                     # Maximum neighbors to consider per node
+
+# Fusion Mechanism Configuration
+fusion_config:
+  # Fusion method: 'adaptive', 'linear', 'rerank'
+  method: "adaptive"
+  
+  # Base weights for components
+  base_weights:
+    vector: 0.5         # Weight for vector similarity
+    graph: 0.4          # Weight for graph relevance
+    interaction: 0.1    # Weight for vector-graph interaction
+  
+  # Features for adaptive weighting
+  adaptive_features:
+    - entity_density
+    - syntactic_complexity
+    - semantic_ambiguity
+  
+  # Interaction scoring
+  interaction:
+    method: "geometric_mean"    # 'geometric_mean', 'harmonic_mean', 'product'
+    rank_bonus: true            # Bonus for appearing in both top-k
+
+# System-wide Settings
+system:
+  # Memory management
+  max_memory_gb: 8.0              # Maximum memory usage limit
+  
+  # Performance settings
+  batch_size: 32                  # Batch size for encoding
+  num_workers: 4                  # Number of parallel workers
+  
+  # Caching
+  enable_cache: true              # Enable result caching
+  cache_size: 1000                # Maximum number of cached queries
+  
+  # Logging
+  log_level: "INFO"               # 'DEBUG', 'INFO', 'WARNING', 'ERROR'
+  log_file: "logs/system.log"     # Log file path
+
+# Experiment-specific Settings (Optional)
+experiment:
+  name: "default_experiment"
+  description: "Standard hybrid retrieval configuration"
+  random_seed: 42
+  
+  # Reproducibility
+  deterministic: true
+  
+  # Output paths
+  output_dir: "outputs/"
+  save_checkpoints: true
+  checkpoint_frequency: 1000      # Save every N queries

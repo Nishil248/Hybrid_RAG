@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtualenv
+venv/
+env/
+ENV/
+
+# Byte-compiled / caches
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter
+.ipynb_checkpoints
+
+# VSCode / JetBrains
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# model/artifacts
+models/
+runs/
+data/knowledge_graphs/
+data/processed/
+data/raw/
+
+# FAISS / binary index
+*.index
+faiss.index
+*.joblib
+*.gpickle
+
+# Python packaging
+*.egg
+pip-wheel-metadata/
+
+# secrets
+.env
